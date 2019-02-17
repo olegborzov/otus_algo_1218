@@ -1,0 +1,42 @@
+<input> 13 0
+
+; считываем данные 
+read 1 ; делимое
+read 2 ; делитель
+
+load =0
+store 3 ; result
+
+; пишем код тут
+
+; если делитель <= 0 - переходим к печати
+load =0
+sub 2
+jz printres
+jgtz printres
+
+loop:
+  ; Если (делимое - делитель) < 0 - переходим к печати
+  load 2
+  sub 1
+  jgtz printres
+
+  ; вычтем делитель из делимого
+  load 1
+  sub 2
+  store 1
+
+  ; иначе - увеличим частное на 1
+  load 3
+  add =1
+  store 3
+  
+  ; Если делимое > 0 - следующая итерация
+  load 1
+  jgtz loop
+
+printres:
+  write 3
+  write 1
+
+Halt

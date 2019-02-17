@@ -1,0 +1,89 @@
+; Заготовка для сортировки
+<input> 6 5 3 4 2 1 6
+
+; считываем количество
+read 0
+add =10
+store 1 ; конец массива
+
+; инициализируем счетчик
+load =10
+store 2 ; счетчик
+
+; считываем данные
+getdata:
+  read *2
+  load 2
+  add =1
+  store 2
+  sub 1
+  jz sort
+  jgtz sort
+  jmp getdata
+
+sort:
+  ; счетчик внешнего цикла
+  load =10
+  store 2 
+
+  ; r1 - позиция последнего регистра
+  ; r2 - счетчик внешнего цикла
+  ; r3 - счетчик внутреннего цикла
+  ; r4 - место для swap'a
+  
+  cycle_out:
+    ; Загружаем стартовую позицию внутреннего цикла и сохраняем в r3
+    load 2
+    store 3
+    
+    cycle_in:
+      ; Инкрементируем счетчик внутреннего цикла
+      load 3
+      add =1
+      store 3
+      load 1
+      sub 3
+      jz cycle_out_continue ; выходим из цикла, если достигнут конец
+      
+      ; Если *r3 - *r2 > 0 - переходим к следующей итерации
+      load *3
+      sub *2
+      jz cycle_in
+      jgtz cycle_in
+      
+      ; Меняем местами *r3 и *r2
+      load *2
+      store 4
+      load *3
+      store *2
+      load 4
+      store *3
+
+      jmp cycle_in ; переходим к следующей итерации
+
+    cycle_out_continue:
+      ; Если еще остались элементы во внешнем цикле - переходим к следующей итерации
+      load 2
+      add =1
+      store 2
+      load 1
+      sub 2
+      sub =1
+      jgtz cycle_out
+
+load =10
+store 2 ; счетчик
+
+; выводим данные
+outdata:
+  write *2
+  load 2
+  add =1
+  store 2
+  sub 1
+  jz exit
+  jgtz exit
+  jmp outdata
+
+exit:
+  halt
